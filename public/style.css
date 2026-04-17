@@ -102,7 +102,7 @@ p {
 
 /* Typography & Utilities */
 .section-title {
-    font-size: 3rem;
+    font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 700;
     text-align: center;
     margin-bottom: 1rem;
@@ -270,7 +270,7 @@ p {
     margin-bottom: 1.5rem;
 }
 .hero h1 {
-    font-size: 4.5rem;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
     color: var(--secondary);
     margin-bottom: 1.5rem;
     line-height: 1.1;
@@ -311,16 +311,19 @@ p {
     color: var(--white);
     padding: 18px 0;
     font-family: 'Outfit';
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 2vw + 0.5rem, 1.3rem); /* Dynamically scales according to viewport */
     font-weight: 500;
     display: flex;
+    width: 100vw;
+    max-width: 100%;
     box-shadow: 0 4px 15px rgba(205, 92, 59, 0.4);
     position: relative;
     z-index: 10;
 }
 .marquee-content {
     display: flex;
-    animation: marquee 20s linear infinite;
+    animation: marquee 40s linear infinite; /* Slowed down because text is longer */
+    width: max-content;
 }
 .marquee-content span {
     padding-right: 50px;
