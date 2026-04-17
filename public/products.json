@@ -1,0 +1,34 @@
+[
+  {
+    "id": "p1",
+    "name": "Premium Cotton Double Bedsheet",
+    "category": "Bedsheets",
+    "price": "₹899",
+    "image": "assets/bedsheet.png",
+    "description": "Luxurious 100% cotton double bedsheet with elegant traditional prints. Includes 2 pillow covers."
+  },
+  {
+    "id": "p2",
+    "name": "Warm Winter Blanket",
+    "category": "Blankets",
+    "price": "₹1499",
+    "image": "assets/blanket.png",
+    "description": "Ultra-soft and warm winter blanket. Durable, premium quality handloom fabric."
+  },
+  {
+    "id": "p3",
+    "name": "Traditional Handloom Curtains",
+    "category": "Curtains",
+    "price": "₹699",
+    "image": "assets/curtain.png",
+    "description": "Set of 2 beautiful handloom curtains to elevate your living room decor."
+  },
+  {
+    "id": "p4",
+    "name": "Durable Floor Mat (Chatai)",
+    "category": "Mats",
+    "price": "₹450",
+    "image": "assets/mat.png",
+    "description": "Traditional Indian woven floor mat. Highly durable, easy to clean, and perfect for daily use."
+  }
+]

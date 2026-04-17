@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Mahaveer Handloom</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: var(--bg-warm); padding: 40px 20px; }
+        .admin-container { max-width: 600px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: var(--border-radius-xl); box-shadow: var(--shadow-soft); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--secondary); }
+        input[type="text"], input[type="file"], textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 1rem; }
+        textarea { height: 100px; resize: vertical; }
+        .btn-submit { width: 100%; margin-top: 20px; }
+        #statusMessage { margin-top: 20px; font-weight: 600; text-align: center; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h2 class="section-title">Upload <span>New Product</span></h2>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" id="name" name="name" required placeholder="e.g. Premium Silk Bedsheet">
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" required placeholder="e.g. Bedsheets">
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" id="price" name="price" required placeholder="e.g. ₹1200">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" required placeholder="Luxurious handloom product..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">Upload Product Image</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-submit">Upload Product</button>
+        </form>
+        <div id="statusMessage"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const statusMsg = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusMsg.textContent = 'Uploading to Cloudinary and MongoDB...';
+            statusMsg.className = '';
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusMsg.textContent = 'Product uploaded successfully!';
+                    statusMsg.className = 'success';
+                    form.reset();
+                } else {
+                    statusMsg.textContent = `Error: ${data.message}`;
+                    statusMsg.className = 'error';
+                }
+            } catch (error) {
+                statusMsg.textContent = `Network Error: ${error.message}`;
+                statusMsg.className = 'error';
+            }
+        });
+    </script>
+</body>
+</html>

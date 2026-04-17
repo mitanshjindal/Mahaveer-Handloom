@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections | Mahaveer Handloom</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- AOS Library CSS for Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-header { padding: 140px 24px 60px; text-align: center; }
+        .filter-ribbon { 
+            display: flex; gap: 20px; justify-content: center; margin-bottom: 3rem; 
+            background: var(--glass-bg); backdrop-filter: blur(10px); padding: 20px; 
+            border-radius: var(--border-radius-xl); box-shadow: var(--shadow-soft); flex-wrap: wrap; 
+        }
+        .filter-group { display: flex; align-items: center; gap: 10px; }
+        .filter-group label { font-family: 'Outfit'; font-weight: 600; color: var(--secondary); }
+        .filter-group select { 
+            padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); 
+            font-family: 'Inter'; font-size: 1rem; outline: none; background: var(--white); cursor: pointer;
+            transition: var(--transition);
+        }
+        .filter-group select:hover { border-color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-logo">Mahaveer Handloom</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Animated Background Blobs -->
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo" data-aos="fade-right">
+                <img src="assets/logo.png" alt="Mahaveer Handloom Logo">
+            </a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <nav class="nav-links" id="navLinks" data-aos="fade-down" data-aos-delay="100">
+                <a href="index.html#home">Home</a>
+                <a href="index.html#about">About Us</a>
+                <a href="collections.html" style="color:var(--primary);">Collection</a>
+                <a href="index.html#gallery">Gallery</a>
+                <a href="index.html#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header & Filters -->
+    <section class="page-header" data-aos="fade-up">
+        <h1 class="section-title">Our <span>Collections</span></h1>
+        <p>Explore our complete catalog. Filter by your needs.</p>
+    </section>
+
+    <div class="container">
+        <div class="filter-ribbon" data-aos="fade-up" data-aos-delay="100">
+            <div class="filter-group">
+                <label for="searchInput" style="display:none;">Search:</label>
+                <input type="text" id="searchInput" placeholder="Search products..." style="padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); font-family: 'Inter'; font-size: 1rem; outline: none; background: var(--white); width: 250px;">
+            </div>
+            <div class="filter-group">
+                <label for="categoryFilter">Category:</label>
+                <select id="categoryFilter">
+                    <option value="All">All Categories</option>
+                    <option value="Bedsheets">Bedsheets</option>
+                    <option value="Blankets">Blankets</option>
+                    <option value="Curtains">Curtains</option>
+                    <option value="Mats">Mats</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sortFilter">Sort By:</label>
+                <select id="sortFilter">
+                    <option value="relevance">Relevance</option>
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="product-grid" id="productGrid" style="margin-bottom: 8rem;">
+            <!-- Products will be injected here via collections.js -->
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919813014949" target="_blank" class="floating-whatsapp" aria-label="WhatsApp">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    </a>
+
+    <!-- Libraries JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    
+    <!-- App Script -->
+    <script src="collections.js"></script>
+</body>
+</html>
