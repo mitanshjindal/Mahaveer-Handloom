@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Mahaveer Handloom</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--bg-warm);
+        }
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-hover);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        .login-logo {
+            width: 150px;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'Outfit';
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid rgba(0,0,0,0.1);
+            font-family: 'Inter';
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(205, 92, 59, 0.2);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-family: 'Outfit';
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        #loginError {
+            color: #d32f2f;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Animated Background Blobs -->
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="login-card">
+        <img src="assets/logo.png" alt="Mahaveer Handloom" class="login-logo">
+        <h2 class="section-title" style="font-size: 2rem; margin-bottom: 5px;">Admin <span>Portal</span></h2>
+        <p style="margin-bottom: 30px;">Sign in to securely manage your inventory.</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" name="username" required placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="login-btn">Secure Login</button>
+            <p id="loginError">Invalid username or password.</p>
+        </form>
+    </div>
+
+    <script>
+        // Cursor Logic
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        if (cursor && cursorFollower) {
+            let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                cursor.style.left = `${mouseX}px`; cursor.style.top = `${mouseY}px`;
+            });
+            function renderCursor() {
+                followerX += (mouseX - followerX) * 0.15; followerY += (mouseY - followerY) * 0.15;
+                cursorFollower.style.left = `${followerX}px`; cursorFollower.style.top = `${followerY}px`;
+                requestAnimationFrame(renderCursor);
+            }
+            requestAnimationFrame(renderCursor);
+            
+            document.querySelectorAll('button, input').forEach(el => {
+                el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); cursorFollower.classList.add('hover'); });
+                el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); cursorFollower.classList.remove('hover'); });
+            });
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('loginError');
+            
+            errorMsg.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // Success: store token and go to admin panel
+                    localStorage.setItem('adminToken', data.token);
+                    window.location.href = '/admin_dashboard.html';
+                } else {
+                    errorMsg.textContent = data.message || 'Login failed';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Network error. Please try again later.';
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

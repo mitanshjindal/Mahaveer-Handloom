@@ -73,8 +73,38 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// Admin Auth Middleware
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'mahaveer-secret-key-123';
+
+const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized: Missing or invalid token' });
+  }
+  
+  const token = authHeader.split(' ')[1];
+  if (token !== ADMIN_TOKEN) {
+    return res.status(403).json({ message: 'Forbidden: Invalid token' });
+  }
+  
+  next();
+};
+
+// API: Admin Login
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  const validUser = process.env.ADMIN_USER || 'admin';
+  const validPass = process.env.ADMIN_PASS || 'mahaveer';
+  
+  if (username === validUser && password === validPass) {
+      res.json({ message: 'Login successful', token: ADMIN_TOKEN });
+  } else {
+      res.status(401).json({ message: 'Invalid username or password' });
+  }
+});
+
 // API: Create new product & Upload Image
-app.post('/api/products', upload.single('image'), async (req, res) => {
+app.post('/api/products', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const { name, category, price, description } = req.body;
     let imageUrl = '';
@@ -106,8 +136,47 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
   }
 });
 
+// API: Update product (Text fields only)
+app.put('/api/products/:id', authMiddleware, async (req, res) => {
+  try {
+    const { name, category, price, description } = req.body;
+    
+    const updatedProduct = await Product.findByIdAndUpdate(
+        req.params.id,
+        { name, category, price, description },
+        { new: true, runValidators: true }
+    );
+
+    if (!updatedProduct) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json({ message: 'Product updated successfully', product: updatedProduct });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update product', error: error.message });
+  }
+});
+
+// API: Delete product
+app.delete('/api/products/:id', authMiddleware, async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    if (!deletedProduct) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+    
+    // Note: To fully clean up, we should ideally delete the image from Cloudinary here
+    // using cloudinary.uploader.destroy(). Keeping it simple for now based on plan.
+    
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to delete product', error: error.message });
+  }
+});
+
+// Only redirect if trying to access original `/admin`
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+  res.redirect('/admin_dashboard.html');
 });
 
 const PORT = process.env.PORT || 3000;
